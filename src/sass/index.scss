@@ -1,2 +1,14 @@
 @import './common';
-@import './example';
+@import './search-form.scss';
+@import './gallery.scss';
+
+.load-more {
+    width: 100%;
+    background-color: deepskyblue;
+    border: none;
+    margin: 10px 5px;
+    height: 40px;
+    cursor: pointer;
+    color: white;
+    font-weight: 700;
+}
