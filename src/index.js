@@ -1,8 +1,8 @@
-import axios from "axios";
 import { Notify } from "notiflix";
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import createImageCardsMarkup from "./createImageCardsMarkup";
+import getImages from "./getImages";
 
 const refs = {
     galleryContainer: document.querySelector('.gallery'),
@@ -12,21 +12,7 @@ const refs = {
 
 let page = 1;
 hideLoadMore();
-var lightbox = new SimpleLightbox('.gallery a');
-
-const getImages = async (searchString, page) => {
-    const images = (await axios('https://pixabay.com/api/', {params: {
-        key: '30779155-f5a839bf4d4e28d8eacf13ca8', 
-        q: searchString,
-        image_type: 'photo',
-        orientation: 'horizontal',
-        safesearch: true,
-        per_page: 40,
-        page: page
-    }})).data;
-
-    return await images;
-}
+const lightbox = new SimpleLightbox('.gallery a');
 
 refs.searchForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -58,8 +44,11 @@ function loadImage(serachValue, page) {
 
         const imagesMarkup = createImageCardsMarkup(images.hits);
         refs.galleryContainer.insertAdjacentHTML('beforeend', imagesMarkup);
-        showLoadMore();
         lightbox.refresh();
+
+        if(images.hits.length > 0 && page * images.hits.length < images.totalHits) {
+            showLoadMore();
+        }
     });
 }
 
